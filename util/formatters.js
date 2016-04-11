@@ -2,7 +2,7 @@ var isArray = require('./core.js').isArray;
 
 //console.log('is array yo', isArray);// isArray([]));
 
-function undef() { return 'undefinedz'; }
+function undef() { return 'undefined'; }
 
 function array(arr) {
   if (arr.length === 0) {
