@@ -6,8 +6,14 @@ function isArray(obj) {
   return obj.constructor === Array;
 }
 
+function isObject(val) {
+  if (val === undefined) return false;
+  return typeof val === 'object';
+}
+
 
 
 module.exports = {
-  isArray: isArray
+  isArray: isArray,
+  isObject: isObject
 }

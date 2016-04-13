@@ -1,6 +1,7 @@
 var chalk = require('chalk');
 var fmt = require('./formatters.js');
 var isArray = require('./core.js').isArray;
+var compareObjects = require('./objects.js').compareObjects;
 
 
 
@@ -33,10 +34,11 @@ function compareArrays(parms) {
 
 
 
-    console.log(chalk.red(msg));
-    console.log(chalk.red(' - was       --> '), chalk.grey(fmt.get(actual)));
-    console.log(chalk.red(' - should be --> '), chalk.grey(fmt.get(shouldBe)));
+    //console.log(chalk.red(msg));
+    //console.log(chalk.red(' - was       --> '), chalk.grey(fmt.get(actual)));
+    //console.log(chalk.red(' - should be --> '), chalk.grey(fmt.get(shouldBe)));
   }
+  //console.log(parms);
 
   if (!isArray(actual)) {fail(); return false;}
   if (actual === undefined) { fail(); return false; }
@@ -44,7 +46,7 @@ function compareArrays(parms) {
 
   if (typeof actual[0] === 'object') { //arrays contain objects, so compare those.
     for (var i = 0; i < actual.length; i++) {
-      if (shallowCompareObjects(actual[i], shouldBe[i]) === false) {
+      if (compareObjects(actual[i], shouldBe[i]) === false) {
         fail(function(obj) { return JSON.stringify(obj); });
         return false;
       }

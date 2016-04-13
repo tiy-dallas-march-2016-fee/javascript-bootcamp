@@ -1,33 +1,12 @@
 var chalk = require('chalk');
 var compareArrays = require('./arrays.js').compareArrays;
+var compareObjects = require('./objects.js').compareObjects;
 var isArray = require('./core.js').isArray;
+var isObject = require('./core.js').isObject;
+var fmt = require('./formatters.js');
 
 var correctCount = 0;
 var incorrectCount = 0;
-
-function fieldCount(obj) {
-  var count = 0;
-  for (var f in obj) {
-    count++;
-  }
-  return count;
-}
-
-function shallowCompareObjects(obj0, obj1) {
-  var obj0FieldCount = fieldCount(obj0);
-  var obj1FieldCount = fieldCount(obj1);
-
-  if (fieldCount(obj0) !== fieldCount(obj1)) {
-    return false;
-  }
-
-  for (var field in obj0) {
-    if (obj0[field] !== obj1[field]) return false;
-  }
-
-  return true;
-}
-
 
 function compareGeneral(parms) {
 
@@ -35,7 +14,7 @@ function compareGeneral(parms) {
     shouldBe = parms.shouldBe,
     msg = parms.msg;
 
-  //console.log('compareGeneral', 'shouldBe', shouldBe, 'actual', actual);
+  //console.log('compareGeneral', 'shouldBe', shouldBe, 'actual', actual, 'isObject', isObject(shouldBe));
   if (shouldBe === actual) {
     return true;
   }
@@ -46,9 +25,10 @@ function compareGeneral(parms) {
     }
 
 
-    console.log(chalk.red(msg));
-    console.log(chalk.red(' - was       --> '), chalk.grey(surroundChar), chalk.grey(actual), chalk.grey(surroundChar));
-    console.log(chalk.red(' - should be --> '), chalk.grey(surroundChar), chalk.grey(shouldBe), chalk.grey(surroundChar));
+    //console.log(chalk.red(msg));
+    //console.log(chalk.red(' - was       --> '), chalk.grey(surroundChar), chalk.grey(actual), chalk.grey(surroundChar));
+    //console.log(chalk.red(' - should be --> '), chalk.grey(surroundChar), chalk.grey(shouldBe), chalk.grey(surroundChar));
+    return false;
   }
 }
 
@@ -61,6 +41,10 @@ function equal(parms) {
     correctCount = correctCount + 1;
   }
   else {
+    console.log(chalk.red(parms.msg));
+    console.log(chalk.red(' - was       --> '), chalk.grey(fmt.get(parms.actual)));
+    console.log(chalk.red(' - should be --> '), chalk.grey(fmt.get(parms.shouldBe)));
+
     incorrectCount = incorrectCount + 1;
   }
 }
@@ -70,6 +54,10 @@ function equalImpl(parms) {
 
   if (isArray(parms.shouldBe)) {
     result = compareArrays(parms)
+  }
+  else if (isObject(parms.shouldBe)) {
+    result = compareObjects(parms);
+    //console.log('res', result);
   }
   else {
     result = compareGeneral(parms);

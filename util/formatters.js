@@ -1,6 +1,5 @@
 var isArray = require('./core.js').isArray;
-
-//console.log('is array yo', isArray);// isArray([]));
+var isObject = require('./core.js').isObject;
 
 function undef() { return 'undefined'; }
 
@@ -16,7 +15,9 @@ function array(arr) {
 
 function getFormatter(obj) {
   if (obj === undefined) return undef();
+  if (typeof obj === 'string') return obj;
   if (isArray(obj)) return array(obj);
+  if (isObject(obj)) return JSON.stringify(obj);
 }
 
 
